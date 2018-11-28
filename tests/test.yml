@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  remote_user: root
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Invoke role looking for puppet masters
+      include_role:
+        name: ../../foreman_dynamic_inv
+      vars:
+        query: "hostgroup+~+linux"
+        group_name: "Linux"
+        foreman_passwd: "{{ lookup('env','passwd') }}"
+        foreman_username: apiread
+        foreman_url: "{{ lookup('env','url') }}"
+    - name: Confirm that result was received
+      assert:
+        that:
+          - "'Linux' in groups"
+          - groups.Linux | length > 0
+    - name: Confirm the role fails when group_name is an empty string
+      block:
+        - include_role:
+            name: ../../foreman_dynamic_inv
+          vars:
+            query: ""
+            group_name: "linux"
+            foreman_passwd: "{{ lookup('env','pass') }}"
+            foreman_user: apiread
+            foreman_url: "{{ lookup('env','url') }}"
+        - assert:
+            that: false
+      rescue:
+        - assert:
+            that: true
+
+

@@ -1,0 +1,22 @@
+galaxy_info:
+  author: Daniel Quackenbush, Drew Mullen
+  description: A module to help to create dynamic query based inventories from foreman
+
+  issue_tracker_url: https://github.com/danquack/foreman_dynamic_inv/issues
+  license: Apache
+  min_ansible_version: 1.2
+
+  github_branch: master
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - xenial
+    - trusty
+    - precise
+
+  galaxy_tags:
+    - foreman
+    - dynamic inventory
+
+dependencies: []

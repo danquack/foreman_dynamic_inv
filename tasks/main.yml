@@ -1,0 +1,19 @@
+---
+- fail:
+  when: group_name | length == 0 or query | length == 0
+- uri:
+    url: https://{{foreman_url}}/api/hosts?thin=true&per_page=99999&search={{query}}
+    method: GET
+    status_code: 201, 200
+    return_content: yes
+    force_basic_auth: yes
+    body_format: json
+    user: "{{foreman_username}}"
+    password: "{{foreman_passwd}}"
+    validate_certs: false
+  register: hosts
+- name: "add host(s) to group {{group_name}}"
+  add_host:
+    name: "{{item.name}}"
+    groups: "{{group_name}}"
+  loop:  "{{hosts['json']['results']}}"
